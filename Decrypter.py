@@ -6,8 +6,7 @@ import Encrypter
 import GUI
 
 key = "rxYLq6DqM9Deb7nARI5sHGdqY7bHaDj5r5Enp2sFYsI"
-# q = "Large neon city"
-# q2 = "Small quiet town"
+
 
 def get_unsplash_image(api_key, search_query):
     url = "https://api.unsplash.com/search/photos"
@@ -66,6 +65,11 @@ def decrypt(img):
     return Image.fromarray(pixel_arr)
 
 
+# Following below was used for reference
+
+
+# q = "Large neon city"
+# q2 = "Small quiet town"
 # def stego_encrypt(carrier_img, secret_img):
 #     c_width, c_height = carrier_img.size
 #     s_width, s_height = secret_img.size
