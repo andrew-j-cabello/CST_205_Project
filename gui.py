@@ -10,19 +10,31 @@ class mainScreen(QWidget):
         super().__init__()
         my_title = QLabel("Encrypter/Decrypter")
 
-        self.linehere = QLineEdit()
-        self.linehere.select_all()
+        self.userline = QLineEdit("Please Enter A Search Term: ")
+        self.userline.setMinimumWidth(250)
+        self.userline.selectAll()
 
-        button = QPushButton("Search")
+        button = QPushButton("Enter")
+        self.label = QLabel("")
+
         button.clicked.connect(self.open)
-        self.linehere.returnPressed.connect(self.open)
+        self.userline.returnPressed.connect(self.open)
 
-        self.mylabel = QLabel('')
+        vbox = QVBoxLayout()
+        vbox.addWidget(my_title)
+        vbox.addWidget(self.userline)
+        vbox.addWidget(button)
+        vbox.addWidget(self.label)
 
-        self.set_layout(vbox)
-        self.show()
+        self.setLayout(vbox)
     
     @Slot()
     def open(self):
-        looking = self.linehere.text
-        mainpath = thesearch(looking)
+        your_input = self.userline.text()
+        self.label.setText(f"Here's what you entered: {your_input}")
+
+
+my_win = mainScreen()
+my_win.show()
+
+sys.exit(my_app.exec())
