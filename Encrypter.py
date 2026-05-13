@@ -16,7 +16,9 @@ from unsplash_helper import fetch_unsplash__image
 def _hidden_image_bits(hidden_img):
     rgb = hidden_img.convert("RGB")
     w, h = rgb.size
-    return f"{w:032b}{h:032b}" + "".join(f"{channel:08b}" for px in rgb.getdata() for channel in px)
+    return f"{w:032b}{h:032b}" + "".join(
+        f"{channel:08b}" for px in rgb.get_flattened_data() for channel in px
+    )
 
 
 def encrypt(cover_img, hidden_img):
@@ -31,7 +33,7 @@ def encrypt(cover_img, hidden_img):
 
     bit_index = 0
     updated_pixels = []
-    for r, g, b in cover.getdata():
+    for r, g, b in cover.get_flattened_data():
         channels = [r, g, b]
         for i in range(3):
             if bit_index < len(bits):
