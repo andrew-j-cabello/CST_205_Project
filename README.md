@@ -25,6 +25,8 @@ This program can be used to add and read hidden codes into images, with public a
 
 Step 1: Download the files from the repository
 
-Step 2: Unzip files, and open the file containing them in your file manager of choice
+Step 2: Make an account with UnSplash in order to access images, put API keys created in the code (Not needed for this presentaiton, we have one preloaded)
 
-Step 3: Open up a Command Line/Terminal, and run gui.py using Python
+Step 3: Unzip files, and open the file containing them in your file manager of choice
+
+Step 4: Open up a Command Line/Terminal, and run gui.py using Python
