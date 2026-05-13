@@ -13,7 +13,13 @@ This program can be used to add and read hidden codes into images, with public a
 
 - Language: Python
 - Framework: Standard Python Script
-- Infrastructure: Unsplash API, NumPy, Pillow, local image processing.
+- Infrastructure:
+  
+ Unsplash API: Used to get images to hide data in.
+
+ NumPy: Used to easily manipulate bits in order to hide the data.
+
+ Pillow: Used to manipulate images in order to hide data in an image.
 
 ## Installation/Usage
 
