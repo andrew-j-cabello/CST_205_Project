@@ -6,7 +6,7 @@ from PIL import Image
 '''
 This should return a random image from unsplash
 '''
-def fetch_unsplash__image(access_key=None, query=None):
+def fetch_unsplash_cover_image(access_key=None, query=None):
     key = access_key or os.environ.get("UNSPLASH_ACCESS_KEY")
     if not key:
         raise ValueError("Set UNSPLASH_ACCESS_KEY or pass access_key=...")

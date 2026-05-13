@@ -10,7 +10,7 @@ Format written into cover image LSBs:
 from pathlib import Path
 
 from PIL import Image
-from unsplash_helper import fetch_unsplash__image
+from unsplash_helper import fetch_unsplash_cover_image
 
 
 def _hidden_image_bits(hidden_img):
@@ -60,7 +60,7 @@ def encrypt_from_unsplash(
     access_key=None,
     query=None,
 ):
-    cover = fetch_unsplash__image(access_key=access_key, query=query)
+    cover = fetch_unsplash_cover_image(access_key=access_key, query=query)
     hidden_img = Image.open(hidden_path).convert("RGB")
     out = Path(output_path)
     out.parent.mkdir(parents=True, exist_ok=True)
