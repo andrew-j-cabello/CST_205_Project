@@ -10,8 +10,8 @@ This program can be used to add and read hidden codes into images, with public a
 
 ## Tech Stack
 
-- Language:
-- Framework:
+- Language: Python
+- Framework: 
 - Database:
 - Infrastructure:
 
