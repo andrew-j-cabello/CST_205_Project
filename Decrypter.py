@@ -1,34 +1,10 @@
+import os
 import numpy as np
-import requests
 from  PIL import Image
-from io import BytesIO
-import Encrypter
-import GUI
+import Encrypter 
+from unsplash_helper import fetch_unsplash_cover_image
 
-key = "rxYLq6DqM9Deb7nARI5sHGdqY7bHaDj5r5Enp2sFYsI"
-
-
-def get_unsplash_image(api_key, search_query):
-    url = "https://api.unsplash.com/search/photos"
-
-    params = {
-        "query": search_query,
-        "client_id": api_key,
-        "per_page": 1
-    }
-    
-    resp = requests.get(url, params=params)
-    if resp.status_code != 200:
-        raise Exception(f"API Error: {resp.status_code} - {resp.text}")
-        
-    data = resp.json()
-    if not data['results']:
-        raise Exception("No images found for this query.")
-        
-    image_url = data['results'][0]['urls']['regular']
-
-    img_resp = requests.get(image_url)
-    return Image.open(BytesIO(img_resp.content)).convert("RGB")
+API_KEY = os.getenv("UNSPLASH_API_KEY", "rxYLq6DqM9Deb7nARI5sHGdqY7bHaDj5r5Enp2sFYsI")
 
 
 def decrypt(img):
@@ -65,53 +41,25 @@ def decrypt(img):
     return Image.fromarray(pixel_arr)
 
 
-# Following below was used for reference
 
+print(f"Describe the image you want to hide:")
+q = str(input())
+print("Describe the carrier:")
+q2 = str(input())
 
-# q = "Large neon city"
-# q2 = "Small quiet town"
-# def stego_encrypt(carrier_img, secret_img):
-#     c_width, c_height = carrier_img.size
-#     s_width, s_height = secret_img.size
+try:
+    print("Fetching images from Unsplash API...")
+    secret = fetch_unsplash_cover_image(API_KEY, q).resize((200, 150))
+    carrier = fetch_unsplash_cover_image(API_KEY, q2).resize((800, 600))
     
-#     header = f"{s_width:032b}{s_height:032b}"
+    print(f"Hiding the {q} image inside the of the {q2} image...")
+    stego_result = Encrypter.encrypt(carrier, secret)
     
-#     secret_data = list(secret_img.getdata())
-#     pixel_bits = "".join([f"{c:08b}" for p in secret_data for c in p])
+    print("Extracting hidden image...")
+    recovered_secret = decrypt(stego_result)
     
-#     all_bits = header + pixel_bits
-#     if len(all_bits) > c_width * c_height * 3:
-#         raise ValueError("Secret image too large.")
-        
-#     stego_img = carrier_img.copy()
-#     pixels = list(stego_img.getdata())
-#     new_pixels = []
-    
-#     bit_idx = 0
-#     for p in pixels:
-#         new_p = list(p)
-#         for i in range(3):
-#             if bit_idx < len(all_bits):
-#                 new_p[i] = (new_p[i] & ~1) | int(all_bits[bit_idx])
-#                 bit_idx += 1
-#         new_pixels.append(tuple(new_p))
-        
-#     stego_img.putdata(new_pixels)
-#     return stego_img
-
-# try:
-#     print("Fetching images from Unsplash API...")
-#     secret = get_unsplash_image(key, q).resize((200, 150))
-#     carrier = get_unsplash_image(key, q2).resize((800, 600))
-    
-#     print("Hiding the beach image inside the forest image...")
-#     stego_result = stego_encrypt(carrier, secret)
-    
-#     print("Extracting hidden image...")
-#     recovered_secret = decrypt(stego_result)
-    
-#     print("\nProcess Complete!")
-#     stego_result.show(title="Carrier containing secret")
-#     recovered_secret.show(title="Extracted Secret")
-# except Exception as e:
-#     print(f"Failed: {e}")
+    print("\nProcess Complete!")
+    stego_result.show(title="Carrier containing secret")
+    recovered_secret.show(title="Extracted Secret")
+except Exception as e:
+    print(f"Failed: {e}")
