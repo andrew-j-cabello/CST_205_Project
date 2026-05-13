@@ -42,24 +42,20 @@ def decrypt(img):
 
 
 
-print(f"Describe the image you want to hide:")
-q = str(input())
-print("Describe the carrier:")
-q2 = str(input())
-
-try:
-    print("Fetching images from Unsplash API...")
-    secret = fetch_unsplash_cover_image(API_KEY, q).resize((200, 150))
-    carrier = fetch_unsplash_cover_image(API_KEY, q2).resize((800, 600))
+def connect(q, q2):
+    try:
+        print("Fetching images from Unsplash API...")
+        secret = fetch_unsplash_cover_image(API_KEY, q).resize((200, 150))
+        carrier = fetch_unsplash_cover_image(API_KEY, q2).resize((800, 600))
     
-    print(f"Hiding the {q} image inside the of the {q2} image...")
-    stego_result = Encrypter.encrypt(carrier, secret)
+        print(f"Hiding the {q} image inside the of the {q2} image...")
+        stego_result = Encrypter.encrypt(carrier, secret)
     
-    print("Extracting hidden image...")
-    recovered_secret = decrypt(stego_result)
+        print("Extracting hidden image...")
+        recovered_secret = decrypt(stego_result)
     
-    print("\nProcess Complete!")
-    stego_result.show(title="Carrier containing secret")
-    recovered_secret.show(title="Extracted Secret")
-except Exception as e:
-    print(f"Failed: {e}")
+        print("\nProcess Complete!")
+        stego_result.show(title="Carrier containing secret")
+        recovered_secret.show(title="Extracted Secret")
+    except Exception as e:
+        print(f"Failed: {e}")
