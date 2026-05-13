@@ -35,8 +35,8 @@ class mainScreen(QWidget):
     
     @Slot()
     def open(self):
-        p = self.hiddenLine.text().strip()
-        p2 = self.carrierLine.text().strip()
+        p = self.userline.text().strip()
+        p2 = self.cryptline.text().strip()
 
         if not p or not p2:
             self.label.setText("Enter image desc.")
