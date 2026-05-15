@@ -5,6 +5,9 @@ This program can be used to add and read hidden codes into images, with public a
 #GITHUB REPO LINK 
 - https://github.com/andrew-j-cabello/CST_205_Project 
 
+#TRELLO LINK 
+- https://trello.com/b/LpIP5e15/team-7623 
+
 ## Features
 
 - Hides one image inside of another using least significant bit (LSB) sternography. It does this by replacing the final bit in every image with a bit from another image, storing information in an image without significantly changing the colors of the first image.
