@@ -11,6 +11,8 @@ def fetch_unsplash_cover_image(access_key=None, query=None):
     if not key:
         raise ValueError("Set UNSPLASH_ACCESS_KEY or pass access_key=...")
 
+    q = query or "(no query, random photo)"
+    print(f"[unsplash] Requesting random photo: {q}")
     params = {"query": query} if query else None
     meta = requests.get(
         "https://api.unsplash.com/photos/random",
@@ -19,9 +21,12 @@ def fetch_unsplash_cover_image(access_key=None, query=None):
         timeout=30,
     ).json()
 
+    photo_id = meta.get("id", "?")
     src = (meta.get("urls") or {}).get("regular")
     if not src:
         raise RuntimeError("Unsplash response had no image URL.")
 
+    print(f"Got photo id={photo_id}, downloading image bytes...")
     img_bytes = requests.get(src, timeout=30).content
+    print(f"Downloaded opening as RGB")
     return Image.open(BytesIO(img_bytes)).convert("RGB")

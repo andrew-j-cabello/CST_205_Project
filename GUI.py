@@ -40,14 +40,18 @@ class mainScreen(QWidget):
 
         if not p or not p2:
             self.label.setText("Enter image desc.")
+            print("[gui] Need both fields: secret query and cover query.")
             return
-        
+
+        print(f"[gui] Run: hide={p!r}, cover={p2!r}")
         self.label.setText("Working")
         try:
             connect(p, p2)
             self.label.setText("Finished")
+            print("[gui] Done.")
         except Exception as e:
             self.label.setText(f"Fail: {e}")
+            print(f"[gui] Error: {e}")
 
 
 my_win = mainScreen()

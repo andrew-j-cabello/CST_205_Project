@@ -1,7 +1,7 @@
 import os
 import numpy as np
-from  PIL import Image
-import Encrypter 
+from PIL import Image
+import Encrypter
 from unsplash_helper import fetch_unsplash_cover_image
 
 API_KEY = os.getenv("UNSPLASH_API_KEY", "rxYLq6DqM9Deb7nARI5sHGdqY7bHaDj5r5Enp2sFYsI")
@@ -9,6 +9,7 @@ API_KEY = os.getenv("UNSPLASH_API_KEY", "rxYLq6DqM9Deb7nARI5sHGdqY7bHaDj5r5Enp2s
 
 def decrypt(img):
     width, height = img.size
+    print(f"[decrypt] Scanning stego image {width}x{height} for LSB ")
     extracted = []
 
     for y in range(height):
@@ -25,7 +26,7 @@ def decrypt(img):
     hidden_height = int(height_bits, 2)
 
     if hidden_width <= 0 or hidden_height <= 0 or hidden_width > width or hidden_height > height:
-        raise ValueError("Extracted invalid dimensions. Is the image corrupted or unencrypted?")
+        raise ValueError("image corrupted or unencrypted?")
 
     total = hidden_width * hidden_height * 3 * 8
     start = 64
@@ -38,23 +39,33 @@ def decrypt(img):
 
     pixel_arr = np.array(pixel_values, dtype=np.uint8).reshape((hidden_height, hidden_width, 3))
 
+    print(
+        f"Rebuilt secret from {len(pixel_values)} bytes "
+        f"({len(pixel_bits)} bits)"
+    )
     return Image.fromarray(pixel_arr)
 
 
 
 def connect(q, q2):
     try:
-        print("Fetching images from Unsplash API...")
+        print(f"\nStart — secret query={q!r}, carrier query={q2!r}")
+        print("Fetching secret image from Unsplash...")
         secret = fetch_unsplash_cover_image(API_KEY, q).resize((200, 150))
+        print(f"Secret loaded, resized to {secret.size}")
+
+        print("Fetching carrier image from Unsplash...")
         carrier = fetch_unsplash_cover_image(API_KEY, q2).resize((800, 600))
-    
-        print(f"Hiding the {q} image inside the of the {q2} image...")
+        print(f"Carrier loaded, resized to {carrier.size}")
+
+        print(f"Hiding secret ({q!r}) inside carrier ({q2!r})...")
         stego_result = Encrypter.encrypt(carrier, secret)
-    
-        print("Extracting hidden image...")
+
+        print("Extracting hidden image via LSB...")
         recovered_secret = decrypt(stego_result)
-    
-        print("\nProcess Complete!")
+        print(f"Recovered secret size: {recovered_secret.size}")
+
+        print("Process complete — opening preview windows.")
         stego_result.show(title="Carrier containing secret")
         recovered_secret.show(title="Extracted Secret")
     except Exception as e:

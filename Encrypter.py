@@ -26,9 +26,13 @@ def encrypt(cover_img, hidden_img):
     bits = _hidden_image_bits(hidden_img)
 
     capacity = cover.width * cover.height * 3
+    print(
+        f"[encrypt] Cover {cover.width}x{cover.height}, "
+        f"hidden {hidden_img.width}x{hidden_img.height}"
+    )
     if len(bits) > capacity:
         raise ValueError(
-            f"Cover image too small. Need {len(bits)} bits, but only {capacity} bits available."
+            f"Cover image too small. Need {len(bits)} bits"
         )
 
     bit_index = 0
